@@ -30,6 +30,11 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+       
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: 'v2.x'
 
       - name: Install dependencies and build
         run: |
