@@ -19,7 +19,7 @@ jobs:
   deploy:
     environment:
       name: nsite
-      url: https://<pubkey>.nsite.lol
+      url: https://npub1p763d86hsj7xzggqeddy7u3hwlg9ku4twar3tvst3uyp9g88ncvqcj7hur.nsite.lol
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
