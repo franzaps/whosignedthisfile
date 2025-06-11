@@ -1,0 +1,44 @@
+name: Deploy to nsite
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "nsite"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job
+  deploy:
+    environment:
+      name: nsite
+      url: https://<pubkey>.nsite.lol
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+          cp dist/index.html dist/404.html
+
+      - name: Install nsyte CLI
+        run: deno install -A -f -g -n nsyte jsr:@nsyte/cli
+
+      - name: Deploy to nsite
+        run: nsyte upload dist --privatekey ${{ secrets.NSITE_KEY }}

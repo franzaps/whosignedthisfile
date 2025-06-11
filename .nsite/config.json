@@ -1,0 +1,20 @@
+{
+  "relays": [
+    "wss://nos.lol",
+    "wss://relay.damus.io",
+    "wss://nostrue.com"
+  ],
+  "servers": [
+    "https://nostr.download",
+    "https://blossom.primal.net",
+    "https://cdn.sovbit.host"
+  ],
+  "profile": {
+    "name": "whosignedthisfile",
+    "display_name": "whosignedthisfile",
+    "about": "Who signed this file"
+  },
+  "publishProfile": true,
+  "publishRelayList": true,
+  "publishServerList": true
+}
