@@ -22,20 +22,25 @@ export function AppProvider(props: AppProviderProps) {
 
   // App configuration state with localStorage persistence
   const [config, setConfig] = useLocalStorage<AppConfig>(storageKey, defaultConfig);
+  
+  // Force dark theme - override any stored theme preference
+  const forcedConfig = { ...config, theme: "dark" as Theme };
 
-  // Generic config updater with callback pattern
+  // Generic config updater with callback pattern (theme is always forced to dark)
   const updateConfig = (updater: (currentConfig: AppConfig) => AppConfig) => {
-    setConfig(updater);
+    const newConfig = updater(forcedConfig);
+    // Always force dark theme regardless of updates
+    setConfig({ ...newConfig, theme: "dark" as Theme });
   };
 
   const appContextValue: AppContextType = {
-    config,
+    config: forcedConfig,
     updateConfig,
     presetRelays,
   };
 
-  // Apply theme effects to document
-  useApplyTheme(config.theme);
+  // Apply theme effects to document (always dark)
+  useApplyTheme(forcedConfig.theme);
 
   return (
     <AppContext.Provider value={appContextValue}>
@@ -45,42 +50,14 @@ export function AppProvider(props: AppProviderProps) {
 }
 
 /**
- * Hook to apply theme changes to the document root
+ * Hook to force dark theme on the document root
  */
 function useApplyTheme(theme: Theme) {
   useEffect(() => {
     const root = window.document.documentElement;
-
-    root.classList.remove('light', 'dark');
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
-  }, [theme]);
-
-  // Handle system theme changes when theme is set to "system"
-  useEffect(() => {
-    if (theme !== 'system') return;
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     
-    const handleChange = () => {
-      const root = window.document.documentElement;
-      root.classList.remove('light', 'dark');
-      
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    // Always force dark theme
+    root.classList.remove('light', 'dark');
+    root.classList.add('dark');
   }, [theme]);
 }

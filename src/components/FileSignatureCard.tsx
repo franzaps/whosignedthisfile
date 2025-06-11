@@ -35,7 +35,7 @@ export function FileSignatureCard({ event }: FileSignatureCardProps) {
   // Debug logging for profile issues
   if (event.pubkey && authorFromVertexlab.data?.metadata) {
     console.log('✅ Got metadata from vertex lab for:', event.pubkey.slice(0, 8));
-  } else if (authorFallback.data?.profile) {
+  } else if (authorFallback.data?.metadata) {
     console.log('⚠️ Using fallback profile for:', event.pubkey.slice(0, 8));
   } else {
     console.log('❌ No profile data found for:', event.pubkey.slice(0, 8));
@@ -146,20 +146,11 @@ export function FileSignatureCard({ event }: FileSignatureCardProps) {
 }
 
 function ProfileDisplay({ author, pubkey }: { 
-  author: { metadata?: NostrMetadata; profile?: NostrMetadata } | null | undefined; 
+  author: { metadata?: NostrMetadata } | null | undefined; 
   pubkey: string;
 }) {
-  // Handle both AuthorProfile (from useAuthorFromVertexlab) and Author (from useAuthor)
-  let metadata;
-  if (author?.metadata) {
-    // AuthorProfile format
-    metadata = author.metadata;
-  } else if (author?.profile) {
-    // Author format from useAuthor
-    metadata = author.profile;
-  } else {
-    metadata = undefined;
-  }
+  // Extract metadata from author data
+  const metadata = author?.metadata;
   
   const displayName = metadata?.name || metadata?.display_name || genUserName(pubkey);
   const about = metadata?.about;
