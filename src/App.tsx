@@ -36,10 +36,15 @@ const defaultConfig: AppConfig = {
 };
 
 const presetRelays = [
-  { url: 'wss://ditto.pub/relay', name: 'Ditto' },
   { url: 'wss://relay.nostr.band', name: 'Nostr.Band' },
+  { url: 'wss://ditto.pub/relay', name: 'Ditto' },
   { url: 'wss://relay.damus.io', name: 'Damus' },
   { url: 'wss://relay.primal.net', name: 'Primal' },
+  { url: 'wss://nos.lol', name: 'nos.lol' },
+  { url: 'wss://relay.snort.social', name: 'Snort' },
+  { url: 'wss://nostr.wine', name: 'Nostr.Wine' },
+  { url: 'wss://relay.plebstr.com', name: 'Plebstr' },
+  { url: 'wss://relay.zapstore.dev', name: 'Zapstore' },
 ];
 
 export function App() {
